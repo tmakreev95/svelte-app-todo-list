@@ -4,32 +4,41 @@ import {
 	deleteTodoAction,
 	restoreTodoAction,
 	deleteAllTodosAction,
-	completeTodoAction
+	completeTodoAction,
+	dragEnterTodoAction,
+	dragLeaveTodoAction,
+	dropTodoAction
 } from './todo-store-actions';
 
+
+
 const initialState = {
-	hovering: 'test',
+	hoveringOverList: '',
 	lists: [
 		{
 			id: 1,
 			title: "Active Todo Items",
 			name: "active-todos",
-			items: [],
+			items: []
 		},
 		{
 			id: 2,
 			title: "Completed Todo Items",
 			name: "completed-todos",
-			items: [],
+			items: []
 		},
 		{
 			id: 3,
 			title: "Deleted Todo Items",
 			name: "deleted-todos",
-			items: [],
+			items: []
 		},
+
 	]
+
 };
+
+
 
 function reducer(state = initialState, action) {
 	switch (action.type) {
@@ -42,7 +51,13 @@ function reducer(state = initialState, action) {
 		case 'RESTORE_TODO':
 			return restoreTodoAction(state, action.payload);
 		case 'COMPLETE_TODO':
-			return completeTodoAction(state, action.payload);		
+			return completeTodoAction(state, action.payload);
+		case 'DRAG_ENTER_TODO':
+			return dragEnterTodoAction(state, action.payload);
+		case 'DRAG_LEAVE_TODO':
+			return dragLeaveTodoAction(state);
+		case 'DROP_TODO':
+			return dropTodoAction(state, action.payload);
 		default:
 			return state
 	}
@@ -56,6 +71,7 @@ function svelteStoreEnhancer(createStoreApi) {
 
 		return {
 			...reduxStore,
+
 			subscribe(fn) {
 				fn(reduxStore.getState());
 

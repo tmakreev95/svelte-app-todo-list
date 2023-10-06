@@ -1,3 +1,5 @@
+import { addToast } from '../toast/toast-store';
+
 export const addTodoAction = (state, data) => {
   if (!data.isCompleted) {
     let activeTodoList = state.lists.find(
@@ -67,3 +69,79 @@ export const completeTodoAction = (state, data) => {
 
   return { ...state };
 };
+
+export const dragEnterTodoAction = (state, payload) => {
+  return { ...state, hoveringOverList: payload }
+};
+
+export const dragLeaveTodoAction = (state) => {
+  return { ...state, hoveringOverList: null }
+};
+
+export const dropTodoAction = (state, payload) => {
+  payload.event.preventDefault();
+
+  const json = payload.event.dataTransfer.getData("text/plain");
+  const data = JSON.parse(json);
+
+  const [item] = state.lists[data.listIndex].items.splice(data.itemIndex, 1);
+  state.lists[payload.listIndex].items.push(item);
+
+  switch (state.hoveringOverList) {
+    case "active-todos":
+      {
+        item.deleted = false;
+        item.isCompleted = false;
+
+        store.dispatch({
+          type: "RESTORE_TODO",
+          payload: {
+            listIndex,
+            itemIndex
+          }
+        });
+      }
+      break;
+    case "deleted-todos":
+      {
+        item.deleted = true;
+
+        addToast({
+          title: "Danger!",
+          message: `You have deleted: ${item.description}!`,
+          type: "danger",
+          dismissible: true,
+          timeout: 2000
+        });
+      }
+      break;
+    case "completed-todos":
+      {
+        item.isCompleted = true;
+        item.deleted = false;
+
+        addToast({
+          title: "Primary!",
+          message: `You have completed: ${item.description}!`,
+          type: "primary",
+          dismissible: true,
+          timeout: 2000
+        });
+      }
+      break;
+    default:
+  }
+
+  return { ...state, hoveringOverList: null };
+};
+
+export const addTodoToastSuccessAction = () => {
+  addToast({
+    title: "Success!",
+    message: `You have successfully restored: ${item.description}!`,
+    type: "success",
+    dismissible: true,
+    timeout: 2000,
+  });
+};
+

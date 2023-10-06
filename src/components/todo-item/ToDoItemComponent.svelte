@@ -21,7 +21,7 @@
 		dispatch("deleteTodoEvent", {
 			todo,
 			listIndex,
-			itemIndex
+			itemIndex,
 		});
 	};
 
@@ -29,20 +29,20 @@
 		dispatch("restoreTodoEvent", {
 			todo,
 			listIndex,
-			itemIndex
+			itemIndex,
 		});
 	};
-	
+
 	const completeTodo = (todo) => {
 		dispatch("completeTodoEvent", {
 			todo,
 			listIndex,
-			itemIndex
-		});		
+			itemIndex,
+		});
 	};
 </script>
 
-<div class="ms-2 me-auto">	
+<div class="ms-2 me-auto">
 	<div
 		class:text-decoration-line-through={todo.isCompleted}
 		class="todo-description"
