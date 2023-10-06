@@ -134,14 +134,3 @@ export const dropTodoAction = (state, payload) => {
 
   return { ...state, hoveringOverList: null };
 };
-
-export const addTodoToastSuccessAction = () => {
-  addToast({
-    title: "Success!",
-    message: `You have successfully restored: ${item.description}!`,
-    type: "success",
-    dismissible: true,
-    timeout: 2000,
-  });
-};
-
